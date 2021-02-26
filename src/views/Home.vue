@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
+    <img src="../assets/snake.png" />
     <HelloWorld />
   </div>
 </template>
@@ -17,8 +17,11 @@ export default {
 </script>
 
 <style scoped>
+.home {
+  background-image: url("/src/assets/background.jpg");
+}
 img {
-  width: 50px;
-  height: auto;
+  width: auto;
+  height: 150px;
 }
 </style>

@@ -1,8 +1,21 @@
 <template>
   <div>
     <div class="field">
+      <div class="board" v-if="isGameActive === false">
+        <button @click="startGame()" class="btn-grad">
+          Start
+        </button>
+        <h3>Your record:</h3>
+        <h3 v-if="counter > 0">You survived: {{ seconds }} seconds</h3>
+      </div>
       <div
-        :class="{ snake: true }"
+        :class="{
+          snake: true,
+          head: index === 0,
+          up: dir === 'Up',
+          right: dir === 'Right',
+          left: dir === 'Left'
+        }"
         v-for="(coord, index) in snakeCoords"
         :key="index"
         :style="{
@@ -11,6 +24,7 @@
         }"
       ></div>
       <div
+        v-if="isGameActive"
         :class="{ food: true }"
         :style="{
           marginLeft: foodCoords[0] * 40 + 'px',
@@ -35,30 +49,31 @@ export default {
   name: "HelloWorld",
   data: () => {
     return {
-      snakeCoords: [
-        [14, 10],
-        [14, 11],
-        [14, 12]
-      ],
+      snakeCoords: [],
       foodCoords: [6, 12],
       dir: "Up",
-      length: 3,
+      length: 2,
       score: 0,
-      isGameActive: false
+      isGameActive: false,
+      counter: 0
     };
   },
   methods: {
     smash() {
       if (this.isInSnakeBody(this.head)) {
-        this.snakeCoords = [
-          [14, 10],
-          [14, 11],
-          [14, 12]
-        ];
-        this.foodCoords = [6, 12];
-        this.length = 3;
-        this.score = 0;
+        this.isGameActive = false;
       }
+    },
+    startGame() {
+      this.isGameActive = true;
+      this.createFood();
+      this.snakeCoords = [
+        [14, 11],
+        [14, 12]
+      ];
+      this.length = 2;
+      this.score = 0;
+      this.counter = 0;
     },
     isInSnakeBody(a) {
       for (let coord of this.snakeCoords.slice(1)) {
@@ -117,6 +132,9 @@ export default {
     },
     neck() {
       return this.snakeCoords[1];
+    },
+    seconds() {
+      return Math.floor(this.counter);
     }
   },
   mounted() {
@@ -135,9 +153,12 @@ export default {
       }
     });
     setInterval(() => {
-      this.updateCoords();
-      this.eatFood();
-      this.smash();
+      if (this.isGameActive) {
+        this.updateCoords();
+        this.eatFood();
+        this.smash();
+        this.counter += 0.15;
+      }
     }, 150);
   }
 };
@@ -145,25 +166,78 @@ export default {
 </script>
 
 <style scoped>
+.snake.head.left {
+  transform: rotate(90deg);
+}
+.snake.head.right {
+  transform: rotate(-90deg);
+}
+.snake.head.up {
+  transform: rotate(180deg);
+}
+.snake.head {
+  background-image: url("../assets/head.png");
+  background-color: rgba(255, 255, 255, 0);
+  z-index: 100;
+}
+h3 {
+  margin-left: 1rem;
+  color: white;
+  text-align: left;
+}
+.btn-grad {
+  background-image: linear-gradient(
+    to right,
+    #df3448 0%,
+    #e6da3b 51%,
+    #eb3349 100%
+  );
+}
+.btn-grad {
+  margin: 10px auto;
+  padding: 15px 45px;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: rgb(255, 255, 255);
+  border-radius: 5px;
+}
+
+.btn-grad:hover {
+  background-position: right center;
+  color: #fff;
+}
+.board {
+  margin-left: 12%;
+  margin-top: 11%;
+  position: absolute;
+  border-radius: 20px;
+  background-color: rgb(94, 72, 16);
+  width: 350px;
+  height: 200px;
+  z-index: 100;
+}
 .field {
   width: 800px;
   height: 800px;
   background-color: burlywood;
   margin: 0 auto;
+  border-radius: 5px;
 }
 .food {
   position: absolute;
-  margin-left: 160px;
-  margin-top: 80px;
-  background-color: crimson;
   height: 40px;
   width: 40px;
   border-radius: 50%;
+  background-image: url("../assets/pizza.png");
 }
 .snake {
   position: absolute;
   background-color: darkcyan;
   width: 40px;
   height: 40px;
+  border-radius: 5px;
 }
 </style>
