@@ -1,5 +1,15 @@
 <template>
   <div>
+    <div class="score">Score: {{ score }}</div>
+    <div class="rules" v-if="isGameActive === false">
+      Welcome to Snake The Game
+      <ul>
+        <li>Snake loves pizza</li>
+        <li>Try to eat as much as possible</li>
+        <li>Dont bite yourself!</li>
+      </ul>
+      Use WASD for movement
+    </div>
     <div class="field">
       <div class="board" v-if="isGameActive === false">
         <button @click="startGame()" class="btn-grad">
@@ -166,16 +176,38 @@ export default {
 </script>
 
 <style scoped>
+.rules {
+  float: right;
+  margin-right: 130px;
+  font-weight: bolder;
+  font-size: 1.5rem;
+  color: white;
+}
+.score {
+  margin-left: 3rem;
+  float: left;
+  font-weight: bolder;
+  font-size: 3rem;
+  color: white;
+}
 .snake.head.left {
+  width: 40px;
+  height: 40px;
   transform: rotate(90deg);
 }
 .snake.head.right {
+  width: 40px;
+  height: 40px;
   transform: rotate(-90deg);
 }
 .snake.head.up {
+  width: 40px;
+  height: 40px;
   transform: rotate(180deg);
 }
 .snake.head {
+  width: 40px;
+  height: 40px;
   background-image: url("../assets/head.png");
   background-color: rgba(255, 255, 255, 0);
   z-index: 100;
@@ -188,9 +220,9 @@ h3 {
 .btn-grad {
   background-image: linear-gradient(
     to right,
-    #df3448 0%,
-    #e6da3b 51%,
-    #eb3349 100%
+    #b646c0 0%,
+    #9e9620 51%,
+    #b646c0 100%
   );
 }
 .btn-grad {
@@ -214,10 +246,10 @@ h3 {
   margin-top: 11%;
   position: absolute;
   border-radius: 20px;
-  background-color: rgb(94, 72, 16);
+  background-color: rgba(83, 22, 97, 0.767);
   width: 350px;
   height: 200px;
-  z-index: 100;
+  z-index: 110;
 }
 .field {
   width: 800px;
