@@ -43,17 +43,40 @@ export default {
       foodCoords: [6, 12],
       dir: "Up",
       length: 3,
-      score: 0
+      score: 0,
+      isGameActive: false
     };
   },
   methods: {
-    isTurnAllowed() {
-      if (isEqualCoords(this.getNewHeadPosition(this.dir), this.neck) === true)
-        return false;
-      return true;
+    smash() {
+      if (this.isInSnakeBody(this.head)) {
+        this.snakeCoords = [
+          [14, 10],
+          [14, 11],
+          [14, 12]
+        ];
+        this.foodCoords = [6, 12];
+        this.length = 3;
+        this.score = 0;
+      }
+    },
+    isInSnakeBody(a) {
+      for (let coord of this.snakeCoords.slice(1)) {
+        if (isEqualCoords(a, coord)) return true;
+      }
+      return false;
+    },
+    isTurnAllowed(d) {
+      let head = this.getNewHeadPosition(d);
+      let neck = this.neck;
+      if (!isEqualCoords(head, neck)) return true;
+      return false;
     },
     createFood() {
       let newFoodCoords = [getRandomInt(0, 19), getRandomInt(0, 19)];
+      while (this.isInSnakeBody(newFoodCoords)) {
+        this.foodCoords = [...newFoodCoords];
+      }
       this.foodCoords = [...newFoodCoords];
     },
     eatFood() {
@@ -64,7 +87,7 @@ export default {
       }
     },
     getNewHeadPosition(d) {
-      let head = this.head;
+      const head = [...this.head];
       if (d === "Up") {
         head[1] -= 1;
       }
@@ -79,13 +102,13 @@ export default {
       }
       if (head[0] < 0) head[0] = 19;
       if (head[1] < 0) head[1] = 19;
-      if (head[0] > 19) head[0] = 19;
-      if (head[1] > 19) head[1] = 19;
-      return (this.head = head);
+      if (head[0] > 19) head[0] = 0;
+      if (head[1] > 19) head[1] = 0;
+      return head;
     },
     updateCoords() {
       let newHead = this.getNewHeadPosition(this.dir);
-      this.snakeCoords = [newHead, ...this.snakeCoords];
+      this.snakeCoords = [newHead, ...this.snakeCoords].slice(0, this.length);
     }
   },
   computed: {
@@ -98,26 +121,27 @@ export default {
   },
   mounted() {
     document.addEventListener("keydown", e => {
-      if (e.key === "w" && this.dir !== "Down") {
+      if (e.key === "w" && this.isTurnAllowed("Up")) {
         this.dir = "Up";
       }
-      if (e.key === "a" && this.dir !== "Right") {
+      if (e.key === "a" && this.isTurnAllowed("Left")) {
         this.dir = "Left";
       }
-      if (e.key === "s" && this.dir !== "Up") {
+      if (e.key === "s" && this.isTurnAllowed("Down")) {
         this.dir = "Down";
       }
-      if (e.key === "d" && this.dir !== "Left") {
+      if (e.key === "d" && this.isTurnAllowed("Right")) {
         this.dir = "Right";
       }
     });
     setInterval(() => {
       this.updateCoords();
       this.eatFood();
-      console.log(this.length);
-    }, 200);
+      this.smash();
+    }, 150);
   }
 };
+// 100 minutes at work
 </script>
 
 <style scoped>
