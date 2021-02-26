@@ -10,12 +10,27 @@
           marginTop: coord[1] * 40 + 'px'
         }"
       ></div>
-      <div class="food"></div>
+      <div
+        :class="{ food: true }"
+        :style="{
+          marginLeft: foodCoords[0] * 40 + 'px',
+          marginTop: foodCoords[1] * 40 + 'px'
+        }"
+      ></div>
     </div>
   </div>
 </template>
 
 <script>
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+function isEqualCoords(a, b) {
+  if ((a[0] === b[0]) & (a[1] === b[1])) return true;
+  return false;
+}
 export default {
   name: "HelloWorld",
   data: () => {
@@ -25,29 +40,48 @@ export default {
         [14, 11],
         [14, 12]
       ],
+      foodCoords: [6, 12],
       dir: "Up",
-      length: 3
+      length: 3,
+      score: 0
     };
   },
   methods: {
+    isTurnAllowed() {
+      if (isEqualCoords(this.getNewHeadPosition(this.dir), this.neck) === true)
+        return false;
+      return true;
+    },
+    createFood() {
+      let newFoodCoords = [getRandomInt(0, 19), getRandomInt(0, 19)];
+      this.foodCoords = [...newFoodCoords];
+    },
+    eatFood() {
+      if (isEqualCoords(this.head, this.foodCoords)) {
+        this.createFood();
+        this.length += 1;
+        this.score += 125;
+      }
+    },
     getNewHeadPosition(d) {
+      let head = this.head;
       if (d === "Up") {
-        this.head[1] -= 1;
+        head[1] -= 1;
       }
       if (d === "Left") {
-        this.head[0] -= 1;
+        head[0] -= 1;
       }
       if (d === "Down") {
-        this.head[1] += 1;
+        head[1] += 1;
       }
       if (d === "Right") {
-        this.head[0] += 1;
+        head[0] += 1;
       }
-      if (this.head[0] < 0) this.head[0] = 19;
-      if (this.head[1] < 0) this.head[1] = 19;
-      if (this.head[0] > 19) this.head[0] = 19;
-      if (this.head[1] > 19) this.head[1] = 19;
-      return this.head;
+      if (head[0] < 0) head[0] = 19;
+      if (head[1] < 0) head[1] = 19;
+      if (head[0] > 19) head[0] = 19;
+      if (head[1] > 19) head[1] = 19;
+      return (this.head = head);
     },
     updateCoords() {
       let newHead = this.getNewHeadPosition(this.dir);
@@ -79,6 +113,8 @@ export default {
     });
     setInterval(() => {
       this.updateCoords();
+      this.eatFood();
+      console.log(this.length);
     }, 200);
   }
 };
