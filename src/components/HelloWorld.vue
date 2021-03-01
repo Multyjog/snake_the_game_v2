@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="score">Score: {{ score }}</div>
-    <div class="lastscore" v-if="storedScore1 > 0">
-      Your best score:{{ storedScore1 }}
-    </div>
+    <!-- <div class="lastscore" v-if="storedScore1 > 0"> -->
+    <!-- Your best score:{{ storedScore1 }} -->
+    <!-- </div> -->
     <div class="rules" v-if="isGameActive === false">
       Welcome to Snake The Game
       <ul>
@@ -68,22 +68,22 @@ export default {
       length: 2,
       score: 0,
       isGameActive: false,
-      counter: 0,
-      storedScore1: 0
+      counter: 0
+      // storedScore1: 0
     };
   },
   methods: {
-    storeScore() {
-      let scoreToStore = this.storedScore1;
-      if (this.score > scoreToStore) {
-        scoreToStore = this.score;
-        localStorage.score = scoreToStore;
-        this.storedScore1 = localStorage.score;
-      }
-    },
+    // storeScore() {
+    //   let scoreToStore = this.storedScore1;
+    //   if (this.score > scoreToStore) {
+    //     scoreToStore = this.score;
+    //     localStorage.score = scoreToStore;
+    //     this.storedScore1 = localStorage.score;
+    //   }
+    // },
     smash() {
       if (this.isInSnakeBody(this.head)) {
-        this.storeScore();
+        // this.storeScore();
         this.isGameActive = false;
       }
     },
@@ -161,7 +161,7 @@ export default {
     }
   },
   mounted() {
-    if (localStorage.score) this.storedScore1 = localStorage.score;
+    // if (localStorage.score) this.storedScore1 = localStorage.score;
     document.addEventListener("keydown", e => {
       if (e.key === "w" && this.isTurnAllowed("Up")) {
         this.dir = "Up";
