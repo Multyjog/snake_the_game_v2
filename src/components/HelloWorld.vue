@@ -11,7 +11,7 @@
         <li>Try to eat as much as possible</li>
         <li>Dont bite yourself!</li>
       </ul>
-      Use WASD for movement
+      Use WASD or &larr; &uarr; &rarr; &darr; for movement
     </div>
     <div class="field">
       <div class="board" v-if="isGameActive === false">
@@ -163,16 +163,25 @@ export default {
   mounted() {
     // if (localStorage.score) this.storedScore1 = localStorage.score;
     document.addEventListener("keydown", e => {
-      if (e.key === "w" && this.isTurnAllowed("Up")) {
+      if ((e.key === "w" || e.key === "ArrowUp") && this.isTurnAllowed("Up")) {
         this.dir = "Up";
       }
-      if (e.key === "a" && this.isTurnAllowed("Left")) {
+      if (
+        (e.key === "a" || e.key === "ArrowLeft") &&
+        this.isTurnAllowed("Left")
+      ) {
         this.dir = "Left";
       }
-      if (e.key === "s" && this.isTurnAllowed("Down")) {
+      if (
+        (e.key === "s" || e.key === "ArrowDown") &&
+        this.isTurnAllowed("Down")
+      ) {
         this.dir = "Down";
       }
-      if (e.key === "d" && this.isTurnAllowed("Right")) {
+      if (
+        (e.key === "d" || e.key === "ArrowRight") &&
+        this.isTurnAllowed("Right")
+      ) {
         this.dir = "Right";
       }
     });
@@ -201,7 +210,7 @@ export default {
 }
 .rules {
   float: right;
-  margin-right: 130px;
+  margin-right: 120px;
   font-weight: bolder;
   font-size: 1.5rem;
   color: white;
