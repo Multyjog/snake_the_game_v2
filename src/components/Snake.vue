@@ -198,6 +198,9 @@ export default {
   }
 }
 @media screen and (max-width: 1440px) {
+  .rules {
+    margin-right: auto !important;
+  }
   img {
     width: 250px;
     height: 170px;
@@ -311,11 +314,12 @@ h3 {
   left: 0;
   right: 0;
   margin-left: auto;
-  margin-right: auto;
+  margin-right: 2rem;
   margin-top: 2rem;
   width: 300px;
   font-weight: bold;
   color: white;
+  font-size: 20px;
 }
 .field {
   width: 800px;
