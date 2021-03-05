@@ -1,19 +1,20 @@
 <template>
   <div>
+    <img src="../assets/snake.png" />
     <div class="score">Score: {{ score }}</div>
     <!-- <div class="lastscore" v-if="storedScore1 > 0"> -->
     <!-- Your best score:{{ storedScore1 }} -->
     <!-- </div> -->
-    <div class="rules" v-if="isGameActive === false">
-      Welcome to Snake The Game
-      <ul>
-        <li>Snake loves pizza</li>
-        <li>Try to eat as much as possible</li>
-        <li>Dont bite yourself!</li>
-      </ul>
-      Use WASD or &larr; &uarr; &rarr; &darr; for movement
-    </div>
     <div class="field">
+      <div class="rules" v-if="isGameActive === false">
+        Welcome to Snake The Game
+        <ul>
+          <li>Snake loves pizza</li>
+          <li>Try to eat as much as possible</li>
+          <li>Dont bite yourself!</li>
+        </ul>
+        Use WASD or &larr; &uarr; &rarr; &darr; for movement
+      </div>
       <div class="board" v-if="isGameActive === false">
         <button @click="startGame()" class="btn-grad">
           Start
@@ -25,9 +26,9 @@
         :class="{
           snake: true,
           head: index === 0,
-          up: dir === 'Up',
-          right: dir === 'Right',
-          left: dir === 'Left'
+          up: dir === 'Up' && isGameActive === true,
+          right: dir === 'Right' && isGameActive === true,
+          left: dir === 'Left' && isGameActive === true
         }"
         v-for="(coord, index) in snakeCoords"
         :key="index"
@@ -51,7 +52,7 @@
 <script>
 import { getRandomInt, isEqualCoords } from "@/utils.js";
 export default {
-  name: "HelloWorld",
+  name: "Snake",
   data: () => {
     return {
       snakeCoords: [],
@@ -191,6 +192,35 @@ export default {
 </script>
 
 <style scoped>
+@media screen and (max-width: 1230px) {
+  img {
+    display: none;
+  }
+}
+@media screen and (max-width: 1440px) {
+  img {
+    width: 250px;
+    height: 170px;
+    top: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-top: 4rem;
+  }
+  .score {
+    margin-left: 3rem;
+    font-weight: bolder;
+    font-size: 3rem;
+    color: white;
+    float: none !important;
+    position: relative !important;
+  }
+}
+img {
+  width: 220px;
+  height: 150px;
+}
 .lastscore {
   width: 400px;
   position: absolute;
@@ -200,19 +230,13 @@ export default {
   font-size: 2rem;
   font-weight: bold;
 }
-.rules {
-  float: right;
-  margin-right: 120px;
-  font-weight: bolder;
-  font-size: 1.5rem;
-  color: white;
-}
 .score {
   margin-left: 3rem;
   float: left;
   font-weight: bolder;
   font-size: 3rem;
   color: white;
+  position: absolute;
 }
 .snake.head.left {
   width: 40px;
@@ -266,14 +290,32 @@ h3 {
   color: #fff;
 }
 .board {
-  margin-left: 12%;
-  margin-top: 11%;
   position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 300px;
   border-radius: 20px;
   background-color: rgba(83, 22, 97, 0.767);
   width: 350px;
   height: 200px;
   z-index: 110;
+}
+.rules {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2rem;
+  width: 300px;
+  font-weight: bold;
+  color: white;
 }
 .field {
   width: 800px;
